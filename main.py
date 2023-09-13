@@ -1,4 +1,5 @@
 import requests
+from flask import Flask, request, jsonify
 
 def get_weather(api_key, city):
     base_url = "http://api.openweathermap.org/data/2.5/weather"
@@ -12,24 +13,18 @@ def get_weather(api_key, city):
         print("Error fetching weather data.")
         return None
 
-def display_weather(data):
-    if data:
-        print(f"------\nWeather in {city}\n------")
-        print(f"Description: {data['weather'][0]['description']}")
-        print(f"Temperature: {round((data['main']['temp'])*(9/5) + 32, 1)}°F")
-        print(f"Humidity: {data['main']['humidity']}%")
-        print(f"Wind Speed: {data['wind']['speed']} m/s")
-    else:
-        print("No weather data available.")
-
-if __name__ == "__main__":
+@app.route('/get_weather', methods=['GET'])
+def get_weather_route():
     try:
         with open("key.txt", "r") as file:
             api_key = file.read().strip()
     except FileNotFoundError:
-        print("Could not find the file with your key.")
+        print("Could not fine file with your key. Please name it 'key.txt'.")
         api_key = None
-    city = input("Enter the name of a city: ")
-
+    city = request.args.get('city')
     weather_data = get_weather(api_key, city)
-    display_weather(weather_data)
+    return jsonify(weather_data)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
