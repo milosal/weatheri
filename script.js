@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p>Wind Speed: ${data.windSpeed} m/s</p>
             `;
         } else {
-            weatherDataDiv.textContent = 'No weather data available.';
+            weatherDataDiv.textContent = 'No weather data available just now.';
         }
     }
 });
